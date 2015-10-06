@@ -1,7 +1,7 @@
 ## Getting Started
 
-> `bower install`
-> `npm install -g babel`
-> `babel src --watch --out-dir build`
+1. `bower install`
+2. `npm install -g babel`
+3. `babel src --watch --out-dir build`
 
 Then open index.html
