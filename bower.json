@@ -6,6 +6,7 @@
   ],
   "description": "Orwell Weekly Time Tracker",
   "license": "MIT",
+  "directory": "vendor",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -14,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.5"
+    "bootstrap": "~3.3.5",
+    "react": ">=0.13.0"
   }
 }
