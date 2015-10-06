@@ -1,0 +1,19 @@
+{
+  "name": "orwell",
+  "version": "1.0.0",
+  "authors": [
+    "Tim Park <timfpark@gmail.com>"
+  ],
+  "description": "Orwell Weekly Time Tracker",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}
