@@ -133,14 +133,20 @@ var ProjectCard = React.createClass({
                         <div className="project-panel-project-attribute" >
                             <span>Time Allocation:</span>
                             <span className="project-panel-slider-container">
-                                <input type="text" className="span2" value=""  data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value={this.state.allocation} data-slider-id="BC" id="time-slide" data-slider-handle="triangle" />
+                                <input type="text" className="span2" value=""  data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value={this.state.allocation} data-slider-id="BC" id="time-slide" data-slider-handle="triangle" />
                             </span>
                         </div>
                   </div>
-                  <div className="btn-group health-button-group" role="group" aria-label="...">
-                    <button type="button" className="btn btn-default"><img width="30" height="30" src="assets/happy_emoji.png" /></button>
-                    <button type="button" className="btn btn-default"><img width="30" height="30" src="assets/sad_emoji.png" /></button>
-                    <button type="button" className="btn btn-default"><img width="30" height="30" src="assets/angry_emoji.jpg" /></button>
+                  <div className="btn-group health-button-group" data-toggle="buttons">
+                      <label className="btn btn-default">
+                          <input type="radio" id="q156" name="health" value="1" selected><span><img width="30" height="30" src="assets/happy_emoji.png" /></span></input>
+                      </label>
+                      <label className="btn btn-default active">
+                          <input type="radio" id="q157" name="health" value="2" checked=""><span><img width="30" height="30" src="assets/sad_emoji.png" /></span></input>
+                      </label>
+                      <label className="btn btn-default">
+                          <input type="radio" id="q158" name="health" value="3"><span><img width="30" height="30" src="assets/angry_emoji.jpg" /></span></input>
+                      </label>
                   </div>
               </div>
           </div>
