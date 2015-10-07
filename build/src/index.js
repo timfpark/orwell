@@ -36,32 +36,62 @@ var UserCard = React.createClass({
         { className: "container-fluid" },
         React.createElement(
           "div",
-          { className: "navbar navbar-default userHeader", id: "subnav" },
+          { className: "row" },
           React.createElement(
             "div",
-            { className: "col-md-12 profileHeader" },
+            { className: "col-md-12 userHeader clearfix" },
             React.createElement(
               "div",
-              { className: "navbar-header profile-navbar" },
-              React.createElement("img", { src: "assets/icon_grey_office365.png", width: "30", height: "30" }),
-              React.createElement(
-                "span",
-                null,
-                "Erik Schlegel"
-              ),
+              null,
               React.createElement(
                 "div",
-                { className: "dateLabel" },
-                "Week of October 5th"
+                { className: "page-title" },
+                React.createElement(
+                  "div",
+                  { className: "page-title" },
+                  React.createElement(
+                    "h3",
+                    { className: "no-margin" },
+                    React.createElement("img", { src: "assets/icon_grey_office365.png", width: "30", height: "30" }),
+                    "Erik Schlegel"
+                  ),
+                  React.createElement(
+                    "span",
+                    { className: "dateLabel" },
+                    "Week of October 5th"
+                  )
+                ),
+                React.createElement(
+                  "ul",
+                  { className: "page-stats" },
+                  React.createElement(
+                    "li",
+                    null,
+                    React.createElement(
+                      "div",
+                      { className: "value" },
+                      React.createElement(
+                        "span",
+                        null,
+                        "Active Projects"
+                      ),
+                      React.createElement(
+                        "h4",
+                        { id: "currentVisitor" },
+                        "3"
+                      )
+                    )
+                  ),
+                  React.createElement(
+                    "li",
+                    null,
+                    React.createElement(ResourceDonutChart, { data: chartInitialData, formatter: formatter,
+                      colors: defaultChartColors })
+                  )
+                )
               ),
-              React.createElement(
-                "div",
-                { className: "pull-right" },
-                React.createElement(ResourceDonutChart, { data: chartInitialData, formatter: formatter,
-                  colors: defaultChartColors })
-              )
-            ),
-            React.createElement("div", { className: "collapse navbar-collapse", id: "navbar-collapse2" })
+              React.createElement("div", { className: "collapse navbar-collapse", id: "navbar-collapse2" })
+            )
           )
         )
       )
@@ -75,7 +105,9 @@ var ResourceDonutChart = React.createClass({
   getInitialState: function getInitialState() {
     var chartData = this.props.data || [];
 
-    return { chartData: chartData, formatter: this.props.formatter || false, colors: this.props.colors || false };
+    return { chartData: chartData,
+      formatter: this.props.formatter || false,
+      colors: this.props.colors || false };
   },
 
   componentDidMount: function componentDidMount() {

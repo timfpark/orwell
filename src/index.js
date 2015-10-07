@@ -29,22 +29,32 @@ var UserCard = React.createClass({
     return (
       <div className="app-container">
         <div className="container-fluid">
-          <div className="navbar navbar-default userHeader" id="subnav">
-               <div className="col-md-12 profileHeader">
-                   <div className="navbar-header profile-navbar">
-                     <img src="assets/icon_grey_office365.png" width="30" height="30" />
-                     <span>Erik Schlegel</span>
-                     <div className="dateLabel">
-                        Week of October 5th
-                     </div>
-                     <div className="pull-right">
-                        <ResourceDonutChart data={chartInitialData} formatter={formatter}
-                                            colors={defaultChartColors}/>
-                     </div>
+          <div className="row">
+               <div className="col-md-12 userHeader clearfix">
+                 <div>
+                   <div className="page-title">
+                     <div className="page-title">
+
+                        <h3 className="no-margin"><img src="assets/icon_grey_office365.png" width="30" height="30" />Erik Schlegel</h3>
+            					  <span className="dateLabel">Week of October 5th</span>
+            				 </div>
+                     <ul className="page-stats">
+                        <li>
+                          <div className="value">
+                            <span>Active Projects</span>
+                            <h4 id="currentVisitor">3</h4>
+                          </div>
+                        </li>
+                        <li>
+                           <ResourceDonutChart data={chartInitialData} formatter={formatter}
+                                               colors={defaultChartColors}/>
+                        </li>
+                    </ul>
                    </div>
                    <div className="collapse navbar-collapse" id="navbar-collapse2">
-                  </div>
-               </div>
+                   </div>
+                </div>
+              </div>
           </div>
         </div>
       </div>
@@ -56,7 +66,9 @@ var ResourceDonutChart = React.createClass({
   getInitialState: function() {
     var chartData =this.props.data || [];
 
-     return{chartData: chartData, formatter: this.props.formatter || false, colors: this.props.colors || false};
+     return{chartData: chartData,
+            formatter: this.props.formatter || false,
+            colors: this.props.colors || false};
   },
 
   componentDidMount: function () {
@@ -75,8 +87,7 @@ var ResourceDonutChart = React.createClass({
 
   render: function() {
     return (
-       <div id="projectChart" className="chartStyle">
-       </div>
+       <div id="projectChart" className="chartStyle" />
     );
   }
 });
