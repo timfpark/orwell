@@ -1,0 +1,36 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,700,200italic,400italic,700italic);
+
+.userHeader{
+    margin-top: 9px;
+}
+
+.profileHeader{
+  padding-top: 10px!important;
+  color: #e74430;
+  font-size: 18px;
+  padding-bottom: 11px;
+}
+
+.dateLabel{
+    display: block;
+    font-size: 12px;
+    color: #525252;
+    padding-left: 34px;
+    margin-top: -6px;
+    font-weight: 600;
+}
+
+.chartStyle{
+  width:150px;
+  height:150px;
+}
+
+.profile-navbar{
+  width: 100%;
+}
+
+body{
+  color: #525252;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 16px;
+}
