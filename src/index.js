@@ -1,11 +1,16 @@
+var projects = [];
+    projects.push({projectName: 'Guide Dogs', allocation: 20});
+
 var TimeCard = React.createClass({
   render: function() {
     return (
         <div>
+          <form>
             <UserCard>
             </UserCard>
             <NewProject />
-            <ProjectCard />
+            <ProjectCard projectName={projects[0].projectName} allocation={projects[0].allocation} />
+          </form>
         </div>
     );
   }
@@ -34,7 +39,6 @@ var UserCard = React.createClass({
                  <div>
                    <div className="page-title">
                      <div className="page-title">
-
                         <h3 className="no-margin"><img src="assets/icon_grey_office365.png" width="30" height="30" />Erik Schlegel</h3>
             					  <span className="dateLabel">Week of October 5th</span>
             				 </div>
@@ -93,55 +97,49 @@ var ResourceDonutChart = React.createClass({
 });
 
 var ProjectCard = React.createClass({
+  getInitialState: function() {
+     return{allocation: this.props.allocation || 0,
+            projectName: this.props.projectName || ''};
+  },
+
+  componentDidMount: function () {
+      var self = this;
+
+      var slider = new Slider('#time-slide', {
+      	formatter: function(value) {
+      		return 'Current value: ' + value + '%';
+      	}
+      });
+
+      slider.on('slide', function(item){
+        self.setState({allocation: item});
+      });
+  },
+
   render: function() {
     return (
-    <div className="container-fluid">
-      <form>
-        <div className="row">
-          <div className="col-md-12">
-              <h3>Project 1: Stroeer</h3>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-              <b>Time Allocation:</b>
-              60%
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-              <b>Project Health:</b>
-
-              <div className="btn-group" data-toggle="buttons">
-                <label className="btn btn-primary active">
-                    <input type="radio" name="health" value="happy" autocomplete="off" checked /> Happy
-                </label>
-                <label className="btn btn-primary">
-                    <input type="radio" name="health" value="neutral" autocomplete="off"/> Neutral
-                </label>
-                <label className="btn btn-primary">
-                    <input type="radio" name="health" value="sad" autocomplete="off"/> Sad
-                </label>
-                <label className="btn btn-primary">
-                    <input type="radio" name="health" value="angry" autocomplete="off"/> Angry
-                </label>
-                <label className="btn btn-primary">
-                    <input type="radio" name="health" value="stressed" autocomplete="off"/> Stressed
-                </label>
+      <div className="row">
+          <div className="col-md-8 col-xs-8">
+              <div className="panel panel-default projectcard-panel">
+                  <div className="panel-heading project-panel-heading">
+                        <img height="30" width="30" className="project-icon" src="assets/project_icon.png" />
+                        <a href="#"><i className="fa fa-times-circle pull-right" style={{'color':'red'}}></i></a>
+                        <h4 className="project-title-label">
+                           <span>{this.state.projectName}</span>
+                           <small className="project-panel-heading-description">{this.state.allocation}%</small>
+                        </h4>
+                  </div>
+                  <div className="panel-body project-panel-body">
+                        <div className="project-panel-project-attribute" >
+                            <span>Time Allocation:</span>
+                            <span className="project-panel-slider-container">
+                                <input type="text" className="span2" value=""  data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value={this.state.allocation} data-slider-id="BC" id="time-slide" data-slider-handle="triangle" />
+                            </span>
+                        </div>
+                  </div>
               </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <textarea rows="4" cols="50">
-            * Did a thing
-            * Did another thing
-            * Yet another thing
-            </textarea>
-          </div>
-        </div>
-      </form>
-    </div>
+      </div>
     );
   }
 });

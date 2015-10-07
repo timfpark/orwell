@@ -1,5 +1,8 @@
 "use strict";
 
+var projects = [];
+projects.push({ projectName: 'Guide Dogs', allocation: 20 });
+
 var TimeCard = React.createClass({
   displayName: "TimeCard",
 
@@ -7,9 +10,13 @@ var TimeCard = React.createClass({
     return React.createElement(
       "div",
       null,
-      React.createElement(UserCard, null),
-      React.createElement(NewProject, null),
-      React.createElement(ProjectCard, null)
+      React.createElement(
+        "form",
+        null,
+        React.createElement(UserCard, null),
+        React.createElement(NewProject, null),
+        React.createElement(ProjectCard, { projectName: projects[0].projectName, allocation: projects[0].allocation })
+      )
     );
   }
 });
@@ -128,97 +135,76 @@ var ResourceDonutChart = React.createClass({
 var ProjectCard = React.createClass({
   displayName: "ProjectCard",
 
+  getInitialState: function getInitialState() {
+    return { allocation: this.props.allocation || 0,
+      projectName: this.props.projectName || '' };
+  },
+
+  componentDidMount: function componentDidMount() {
+    var self = this;
+
+    var slider = new Slider('#time-slide', {
+      formatter: function formatter(value) {
+        return 'Current value: ' + value + '%';
+      }
+    });
+
+    slider.on('slide', function (item) {
+      self.setState({ allocation: item });
+    });
+  },
+
   render: function render() {
     return React.createElement(
       "div",
-      { className: "container-fluid" },
+      { className: "row" },
       React.createElement(
-        "form",
-        null,
+        "div",
+        { className: "col-md-8 col-xs-8" },
         React.createElement(
           "div",
-          { className: "row" },
+          { className: "panel panel-default projectcard-panel" },
           React.createElement(
             "div",
-            { className: "col-md-12" },
+            { className: "panel-heading project-panel-heading" },
+            React.createElement("img", { height: "30", width: "30", className: "project-icon", src: "assets/project_icon.png" }),
             React.createElement(
-              "h3",
-              null,
-              "Project 1: Stroeer"
-            )
-          )
-        ),
-        React.createElement(
-          "div",
-          { className: "row" },
-          React.createElement(
-            "div",
-            { className: "col-md-12" },
-            React.createElement(
-              "b",
-              null,
-              "Time Allocation:"
-            ),
-            "60%"
-          )
-        ),
-        React.createElement(
-          "div",
-          { className: "row" },
-          React.createElement(
-            "div",
-            { className: "col-md-12" },
-            React.createElement(
-              "b",
-              null,
-              "Project Health:"
+              "a",
+              { href: "#" },
+              React.createElement("i", { className: "fa fa-times-circle pull-right", style: { 'color': 'red' } })
             ),
             React.createElement(
-              "div",
-              { className: "btn-group", "data-toggle": "buttons" },
+              "h4",
+              { className: "project-title-label" },
               React.createElement(
-                "label",
-                { className: "btn btn-primary active" },
-                React.createElement("input", { type: "radio", name: "health", value: "happy", autocomplete: "off", checked: true }),
-                " Happy"
+                "span",
+                null,
+                this.state.projectName
               ),
               React.createElement(
-                "label",
-                { className: "btn btn-primary" },
-                React.createElement("input", { type: "radio", name: "health", value: "neutral", autocomplete: "off" }),
-                " Neutral"
-              ),
-              React.createElement(
-                "label",
-                { className: "btn btn-primary" },
-                React.createElement("input", { type: "radio", name: "health", value: "sad", autocomplete: "off" }),
-                " Sad"
-              ),
-              React.createElement(
-                "label",
-                { className: "btn btn-primary" },
-                React.createElement("input", { type: "radio", name: "health", value: "angry", autocomplete: "off" }),
-                " Angry"
-              ),
-              React.createElement(
-                "label",
-                { className: "btn btn-primary" },
-                React.createElement("input", { type: "radio", name: "health", value: "stressed", autocomplete: "off" }),
-                " Stressed"
+                "small",
+                { className: "project-panel-heading-description" },
+                this.state.allocation,
+                "%"
               )
             )
-          )
-        ),
-        React.createElement(
-          "div",
-          { className: "row" },
+          ),
           React.createElement(
             "div",
-            { className: "col-md-12" },
+            { className: "panel-body project-panel-body" },
             React.createElement(
-              "textarea",
-              { rows: "4", cols: "50" },
-              "* Did a thing * Did another thing * Yet another thing"
+              "div",
+              { className: "project-panel-project-attribute" },
+              React.createElement(
+                "span",
+                null,
+                "Time Allocation:"
+              ),
+              React.createElement(
+                "span",
+                { className: "project-panel-slider-container" },
+                React.createElement("input", { type: "text", className: "span2", value: "", "data-slider-min": "0", "data-slider-max": "100", "data-slider-step": "1", "data-slider-value": this.state.allocation, "data-slider-id": "BC", id: "time-slide", "data-slider-handle": "triangle" })
+              )
             )
           )
         )

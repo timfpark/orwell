@@ -17,6 +17,8 @@
   "dependencies": {
     "bootstrap": "~3.3.5",
     "react": ">=0.13.0",
-    "morris.js": "*"
+    "morris.js": "*",
+    "fontawesome": "~4.3.0",
+    "seiyria-bootstrap-slider": "5.1.1"
   }
 }
