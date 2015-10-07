@@ -84,3 +84,25 @@ body{
   font-family: "Source Sans Pro", sans-serif;
   font-size: 16px;
 }
+
+.actionbar-wrapper{
+    background: #eee;
+    padding: 15px;
+    border: 1px solid #dfdfdf;
+    border-width: 1px 0;
+    text-align: left;
+    padding-bottom: 13px;
+    padding-top: 13px;
+}
+
+.shortcut-link {
+    display: inline-block;
+    color: #ccc;
+    margin-right: 20px;
+    text-shadow: 0 1px 0 #fff;
+    transition: color .2s ease;
+    -webkit-transition: color .2s ease;
+    -moz-transition: color .2s ease;
+    -ms-transition: color .2s ease;
+    -o-transition: color .2s ease;
+}

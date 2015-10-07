@@ -9,11 +9,7 @@ var TimeCard = React.createClass({
       null,
       React.createElement(UserCard, null),
       React.createElement(NewProject, null),
-      React.createElement(
-        "button",
-        null,
-        "Submit"
-      )
+      React.createElement(ProjectCard, null)
     );
   }
 });
@@ -241,7 +237,16 @@ var NewProject = React.createClass({
       React.createElement(
         "div",
         { className: "col-md-12" },
-        "+ Add a New Project"
+        React.createElement(
+          "div",
+          { className: "actionbar-wrapper" },
+          React.createElement(
+            "button",
+            { type: "button", className: "btn btn-success btn-sm" },
+            React.createElement("span", { "class": "glyphicon glyphicon-star", "aria-hidden": "true" }),
+            "Add Project"
+          )
+        )
       )
     );
   }

@@ -5,7 +5,7 @@ var TimeCard = React.createClass({
             <UserCard>
             </UserCard>
             <NewProject />
-            <button>Submit</button>
+            <ProjectCard />
         </div>
     );
   }
@@ -151,7 +151,11 @@ var NewProject = React.createClass({
     return (
       <div className="row">
         <div className="col-md-12">
-            + Add a New Project
+            <div className="actionbar-wrapper">
+                <button type="button" className="btn btn-success btn-sm">
+                   <span class="glyphicon glyphicon-star" aria-hidden="true"></span>Add Project
+                </button>
+            </div>
         </div>
       </div>
     );
