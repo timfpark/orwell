@@ -22,7 +22,11 @@ var UserCard = React.createClass({
   displayName: "UserCard",
 
   render: function render() {
-    var chartInitialData = [{ label: "Download Sales", value: 12 }, { label: "In-Store Sales", value: 30 }, { label: "Mail-Order Sales", value: 20 }];
+    var chartInitialData = [{ label: "Project Bethesda", value: 22 }, { label: "Guide-Dogs", value: 60 }, { label: "Docker Hackfest", value: 18 }];
+    var formatter = function formatter(x) {
+      return x + "%";
+    };
+    var defaultChartColors = ['#6bafbd', '#65cea7', '#f3ce85', '#fc8675'];
 
     return React.createElement(
       "div",
@@ -53,7 +57,8 @@ var UserCard = React.createClass({
               React.createElement(
                 "div",
                 { className: "pull-right" },
-                React.createElement(ResourceDonutChart, { data: chartInitialData })
+                React.createElement(ResourceDonutChart, { data: chartInitialData, formatter: formatter,
+                  colors: defaultChartColors })
               )
             ),
             React.createElement("div", { className: "collapse navbar-collapse", id: "navbar-collapse2" })
@@ -70,7 +75,7 @@ var ResourceDonutChart = React.createClass({
   getInitialState: function getInitialState() {
     var chartData = this.props.data || [];
 
-    return { chartData: chartData };
+    return { chartData: chartData, formatter: this.props.formatter || false, colors: this.props.colors || false };
   },
 
   componentDidMount: function componentDidMount() {
@@ -80,17 +85,15 @@ var ResourceDonutChart = React.createClass({
       Morris.Donut({
         element: React.findDOMNode(self),
         data: this.state.chartData,
-        resize: true
+        resize: true,
+        formatter: this.state.formatter,
+        colors: this.state.colors
       });
     }
   },
 
   render: function render() {
-    return React.createElement(
-      "div",
-      { id: "projectChart", className: "chartStyle" },
-      ">"
-    );
+    return React.createElement("div", { id: "projectChart", className: "chartStyle" });
   }
 });
 

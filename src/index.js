@@ -11,13 +11,19 @@ var TimeCard = React.createClass({
   }
 });
 
-
 var UserCard = React.createClass({
   render: function() {
     var chartInitialData = [
-        {label: "Download Sales", value: 12},
-        {label: "In-Store Sales", value: 30},
-        {label: "Mail-Order Sales", value: 20}
+        {label: "Project Bethesda", value: 22},
+        {label: "Guide-Dogs", value: 60},
+        {label: "Docker Hackfest", value: 18}
+      ];
+    var formatter = function (x) { return x + "%"};
+    var defaultChartColors = [
+        '#6bafbd',
+        '#65cea7',
+        '#f3ce85',
+        '#fc8675'
       ];
 
     return (
@@ -32,7 +38,8 @@ var UserCard = React.createClass({
                         Week of October 5th
                      </div>
                      <div className="pull-right">
-                        <ResourceDonutChart data={chartInitialData}/>
+                        <ResourceDonutChart data={chartInitialData} formatter={formatter}
+                                            colors={defaultChartColors}/>
                      </div>
                    </div>
                    <div className="collapse navbar-collapse" id="navbar-collapse2">
@@ -49,7 +56,7 @@ var ResourceDonutChart = React.createClass({
   getInitialState: function() {
     var chartData =this.props.data || [];
 
-     return{chartData: chartData};
+     return{chartData: chartData, formatter: this.props.formatter || false, colors: this.props.colors || false};
   },
 
   componentDidMount: function () {
@@ -59,14 +66,16 @@ var ResourceDonutChart = React.createClass({
         Morris.Donut({
            element: React.findDOMNode(self),
            data: this.state.chartData,
-           resize: true
+           resize: true,
+           formatter: this.state.formatter,
+           colors: this.state.colors
          })
      }
   },
 
   render: function() {
     return (
-       <div id="projectChart" className="chartStyle">>
+       <div id="projectChart" className="chartStyle">
        </div>
     );
   }
