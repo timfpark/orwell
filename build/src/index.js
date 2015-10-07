@@ -206,6 +206,25 @@ var ProjectCard = React.createClass({
                 React.createElement("input", { type: "text", className: "span2", value: "", "data-slider-min": "0", "data-slider-max": "100", "data-slider-step": "1", "data-slider-value": this.state.allocation, "data-slider-id": "BC", id: "time-slide", "data-slider-handle": "triangle" })
               )
             )
+          ),
+          React.createElement(
+            "div",
+            { className: "btn-group health-button-group", role: "group", "aria-label": "..." },
+            React.createElement(
+              "button",
+              { type: "button", className: "btn btn-default" },
+              React.createElement("img", { width: "30", height: "30", src: "assets/happy_emoji.png" })
+            ),
+            React.createElement(
+              "button",
+              { type: "button", className: "btn btn-default" },
+              React.createElement("img", { width: "30", height: "30", src: "assets/sad_emoji.png" })
+            ),
+            React.createElement(
+              "button",
+              { type: "button", className: "btn btn-default" },
+              React.createElement("img", { width: "30", height: "30", src: "assets/angry_emoji.jpg" })
+            )
           )
         )
       )

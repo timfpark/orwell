@@ -137,6 +137,11 @@ var ProjectCard = React.createClass({
                             </span>
                         </div>
                   </div>
+                  <div className="btn-group health-button-group" role="group" aria-label="...">
+                    <button type="button" className="btn btn-default"><img width="30" height="30" src="assets/happy_emoji.png" /></button>
+                    <button type="button" className="btn btn-default"><img width="30" height="30" src="assets/sad_emoji.png" /></button>
+                    <button type="button" className="btn btn-default"><img width="30" height="30" src="assets/angry_emoji.jpg" /></button>
+                  </div>
               </div>
           </div>
       </div>

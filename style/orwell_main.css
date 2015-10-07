@@ -157,6 +157,7 @@ body{
     text-align: left;
     font-weight: bold;
     font-size: 15px;
+    padding-top: 10px;
     font-weight: 600;
 }
 
@@ -177,4 +178,8 @@ body{
 
 .project-panel-slider-container{
   margin-left: 9px;
+}
+
+.health-button-group{
+  padding-left: 17px;
 }
