@@ -1,6 +1,8 @@
-//Office.initialize = function (reason) {
-//    $(document).ready(function () {});
-//};
+if(typeof Office != 'undefined'){
+  Office.initialize = function (reason) {
+    $(document).ready(function () {});
+  };
+}
 
 var projects = [
   {
@@ -42,8 +44,10 @@ var TimeCard = React.createClass({
 
 var UserCard = React.createClass({
   getInitialState: function() {
-    var displayName = '';
-     return{userDisplayName: displayName};
+    var defaultUsername = "Erik Schlegel";
+    var userName = (typeof Office != 'undefined')?Office.context.mailbox.userProfile.displayName:defaultUsername;
+
+    return{userDisplayName: userName};
   },
 
   render: function() {
@@ -65,7 +69,7 @@ var UserCard = React.createClass({
                  <div>
                    <div className="page-title">
                      <div className="page-title">
-                        <h3 className="no-margin"><img src="assets/icon_grey_office365.png" width="30" height="30" />Erik Schlegel</h3>
+                        <h3 className="no-margin"><img src="assets/icon_grey_office365.png" width="30" height="30" />{this.state.userDisplayName}</h3>
             					  <span className="dateLabel">Week of October 5th</span>
             				 </div>
                      <ul className="page-stats">

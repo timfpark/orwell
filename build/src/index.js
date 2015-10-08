@@ -1,8 +1,10 @@
-//Office.initialize = function (reason) {
-//    $(document).ready(function () {});
-//};
-
 'use strict';
+
+if (typeof Office != 'undefined') {
+  Office.initialize = function (reason) {
+    $(document).ready(function () {});
+  };
+}
 
 var projects = [{
   projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!'
@@ -49,8 +51,10 @@ var UserCard = React.createClass({
   displayName: 'UserCard',
 
   getInitialState: function getInitialState() {
-    var displayName = '';
-    return { userDisplayName: displayName };
+    var defaultUsername = "Erik Schlegel";
+    var userName = typeof Office != 'undefined' ? Office.context.mailbox.userProfile.displayName : defaultUsername;
+
+    return { userDisplayName: userName };
   },
 
   render: function render() {
@@ -76,7 +80,7 @@ var UserCard = React.createClass({
               'h3',
               { className: 'no-margin' },
               React.createElement('img', { src: 'assets/icon_grey_office365.png', width: '30', height: '30' }),
-              'Erik Schlegel'
+              this.state.userDisplayName
             ),
             React.createElement(
               'span',
