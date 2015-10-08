@@ -15,11 +15,10 @@ var TimeCard = React.createClass({
     return (
         <div>
           <form>
-            <UserCard projects={this.state.projects} />
-            <NewProject />
             <div className="app-container">
               <div className="container-fluid">
                 <div className="row">
+                  <UserCard projects={this.state.projects} />
                   {
                     this.state.projects.map(function(project, index){
                         return <ProjectCard projectName={project.projectName} allocation={project.allocation}
@@ -61,13 +60,9 @@ var UserCard = React.createClass({
       ];
 
     return (
-               <div className="col-md-12 userHeader clearfix">
+               <div className="col-md-3 col-xs-3 userHeader clearfix">
                  <div>
                    <div className="page-title">
-                     <div className="page-title">
-                        <h3 className="no-margin"><img src="assets/icon_grey_office365.png" width="30" height="30" />{this.state.userDisplayName}</h3>
-            					  <span className="dateLabel">Week of October 5th</span>
-            				 </div>
                      <ul className="page-stats">
                         <li>
                           <div className="value">
@@ -83,6 +78,9 @@ var UserCard = React.createClass({
                    </div>
                    <div className="collapse navbar-collapse" id="navbar-collapse2">
                    </div>
+                </div>
+                <div>
+                    <NewProject />
                 </div>
               </div>
     );
@@ -178,7 +176,7 @@ var ProjectCard = React.createClass({
     var sliderId = 'time-slide' + this.props.id;
 
     return (
-          <div className="col-md-4 col-xs-4">
+          <div className="col-md-3 col-xs-3 panel-container">
               <div className="panel panel-default projectcard-panel">
                   <div className="panel-heading project-panel-heading">
                         <img height="30" width="30" className="project-icon" src="assets/project_icon.png" />
@@ -209,7 +207,7 @@ var ProjectCard = React.createClass({
                   </div>
                   <div className="panel-body project-panel-body">
                         <div className="project-panel-project-attribute" >
-                            <span>Notes: <small>{this.state.noteCharRemaining} characters remaining</small></span>
+                            <span>Notes: <small>{this.state.noteCharRemaining} remaining</small></span>
                         </div>
                         <div>
                              <textarea className="form-control" rows="2" id="comment" onChange={this.onNotesChange}>

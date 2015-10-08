@@ -1,7 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,700,200italic,400italic,700italic);
 
 .userHeader{
-    padding: 20px;
     border-bottom: 1px solid #eee;
     padding-bottom:1px;
     margin-bottom:0px;
@@ -35,7 +34,6 @@
 .page-stats{
   float: right;
   margin: 0;
-  display: flex;
   padding: 0;
   list-style: none;
   -webkit-margin-before: 1em;
@@ -88,6 +86,7 @@ body{
 .actionbar-wrapper{
     background: #eee;
     padding: 15px;
+    margin-top: 18px;
     border: 1px solid #dfdfdf;
     border-width: 1px 0;
     text-align: left;
@@ -112,7 +111,7 @@ body{
     box-shadow: 0 1px 0 #cfcfcf;
     border-radius: 3px;
     padding: 2px 2px;
-    margin:15px;
+    margin:7px;
 }
 
 .project-icon {
@@ -185,8 +184,21 @@ body{
 
 .project-panel-slider-container{
   margin-left: 9px;
+  width:175px;
 }
 
 .health-button-group{
   padding-left: 17px;
+}
+
+.panel-container{
+  padding:0px;
+  margin:0px;
+}
+.slider-horizontal{
+  width:175px!important;
+}
+
+textarea{
+  width: 185px;
 }

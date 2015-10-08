@@ -1,10 +1,6 @@
 'use strict';
 
-if (typeof Office != 'undefined') {
-  Office.initialize = function (reason) {
-    $(document).ready(function () {});
-  };
-}
+Office.initialize = function (reason) {};
 
 var TimeCard = React.createClass({
   displayName: 'TimeCard',
@@ -22,8 +18,6 @@ var TimeCard = React.createClass({
       React.createElement(
         'form',
         null,
-        React.createElement(UserCard, { projects: this.state.projects }),
-        React.createElement(NewProject, null),
         React.createElement(
           'div',
           { className: 'app-container' },
@@ -33,6 +27,7 @@ var TimeCard = React.createClass({
             React.createElement(
               'div',
               { className: 'row' },
+              React.createElement(UserCard, { projects: this.state.projects }),
               this.state.projects.map(function (project, index) {
                 return React.createElement(ProjectCard, { projectName: project.projectName, allocation: project.allocation,
                   notes: project.notes, id: index });
@@ -71,28 +66,13 @@ var UserCard = React.createClass({
 
     return React.createElement(
       'div',
-      { className: 'col-md-12 userHeader clearfix' },
+      { className: 'col-md-3 col-xs-3 userHeader clearfix' },
       React.createElement(
         'div',
         null,
         React.createElement(
           'div',
           { className: 'page-title' },
-          React.createElement(
-            'div',
-            { className: 'page-title' },
-            React.createElement(
-              'h3',
-              { className: 'no-margin' },
-              React.createElement('img', { src: 'assets/icon_grey_office365.png', width: '30', height: '30' }),
-              this.state.userDisplayName
-            ),
-            React.createElement(
-              'span',
-              { className: 'dateLabel' },
-              'Week of October 5th'
-            )
-          ),
           React.createElement(
             'ul',
             { className: 'page-stats' },
@@ -123,6 +103,11 @@ var UserCard = React.createClass({
           )
         ),
         React.createElement('div', { className: 'collapse navbar-collapse', id: 'navbar-collapse2' })
+      ),
+      React.createElement(
+        'div',
+        null,
+        React.createElement(NewProject, null)
       )
     );
   }
@@ -218,7 +203,7 @@ var ProjectCard = React.createClass({
 
     return React.createElement(
       'div',
-      { className: 'col-md-4 col-xs-4' },
+      { className: 'col-md-3 col-xs-3 panel-container' },
       React.createElement(
         'div',
         { className: 'panel panel-default projectcard-panel' },
@@ -322,7 +307,7 @@ var ProjectCard = React.createClass({
                 'small',
                 null,
                 this.state.noteCharRemaining,
-                ' characters remaining'
+                ' remaining'
               )
             )
           ),
