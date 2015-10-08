@@ -1,3 +1,7 @@
+//Office.initialize = function (reason) {
+//    $(document).ready(function () {});
+//};
+
 var projects = [
   {
     projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!'
@@ -37,6 +41,11 @@ var TimeCard = React.createClass({
 });
 
 var UserCard = React.createClass({
+  getInitialState: function() {
+    var displayName = '';
+     return{userDisplayName: displayName};
+  },
+
   render: function() {
     var chartInitialData = [
         {label: "Project Bethesda", value: 22},

@@ -1,3 +1,7 @@
+//Office.initialize = function (reason) {
+//    $(document).ready(function () {});
+//};
+
 'use strict';
 
 var projects = [{
@@ -43,6 +47,11 @@ var TimeCard = React.createClass({
 
 var UserCard = React.createClass({
   displayName: 'UserCard',
+
+  getInitialState: function getInitialState() {
+    var displayName = '';
+    return { userDisplayName: displayName };
+  },
 
   render: function render() {
     var chartInitialData = [{ label: "Project Bethesda", value: 22 }, { label: "Guide-Dogs", value: 60 }, { label: "Docker Hackfest", value: 18 }];
