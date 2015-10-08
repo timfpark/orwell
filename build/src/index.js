@@ -110,7 +110,7 @@ var UserCard = React.createClass({
                 React.createElement(
                   'h4',
                   { id: 'currentVisitor' },
-                  '3'
+                  this.state.projects.length
                 )
               )
             ),

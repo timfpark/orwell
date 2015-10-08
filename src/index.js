@@ -76,7 +76,7 @@ var UserCard = React.createClass({
                         <li>
                           <div className="value">
                             <span>Active Projects</span>
-                            <h4 id="currentVisitor">3</h4>
+                            <h4 id="currentVisitor">{this.state.projects.length}</h4>
                           </div>
                         </li>
                         <li>
