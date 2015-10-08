@@ -1,5 +1,5 @@
 var projects = [];
-    projects.push({projectName: 'Guide Dogs', allocation: 20});
+    projects.push({projectName: 'Guide Dogs', allocation: 20, notes: 'This project is going great!'});
 
 var TimeCard = React.createClass({
   render: function() {
@@ -9,7 +9,8 @@ var TimeCard = React.createClass({
             <UserCard>
             </UserCard>
             <NewProject />
-            <ProjectCard projectName={projects[0].projectName} allocation={projects[0].allocation} />
+            <ProjectCard projectName={projects[0].projectName} allocation={projects[0].allocation}
+                         notes={projects[0].notes}/>
           </form>
         </div>
     );
@@ -98,8 +99,14 @@ var ResourceDonutChart = React.createClass({
 
 var ProjectCard = React.createClass({
   getInitialState: function() {
+    var noteCharCount = this.props.notes?this.props.notes.length: 0;
+    var noteCharAllowed = 160;
+    var charRemaining = noteCharAllowed - noteCharCount;
+
      return{allocation: this.props.allocation || 0,
-            projectName: this.props.projectName || ''};
+            projectName: this.props.projectName || '',
+            notes: this.props.notes || '',
+            noteCharRemaining: charRemaining};
   },
 
   componentDidMount: function () {
@@ -114,6 +121,11 @@ var ProjectCard = React.createClass({
       slider.on('slide', function(item){
         self.setState({allocation: item});
       });
+  },
+
+  onNotesChange: function(ev){
+     var newTextCount = ev.target.value.length
+     this.setState({noteCharRemaining: 160 - newTextCount});
   },
 
   render: function() {
@@ -147,6 +159,16 @@ var ProjectCard = React.createClass({
                       <label className="btn btn-default">
                           <input type="radio" id="q158" name="health" value="3"><span><img width="30" height="30" src="assets/angry_emoji.jpg" /></span></input>
                       </label>
+                  </div>
+                  <div className="panel-body project-panel-body">
+                        <div className="project-panel-project-attribute" >
+                            <span>Notes:(<i>{this.state.noteCharRemaining} characters remaining</i>)</span>
+                        </div>
+                        <div>
+                             <textarea className="form-control" rows="3" id="comment" onChange={this.onNotesChange}>
+                                {this.state.notes}
+                             </textarea>
+                        </div>
                   </div>
               </div>
           </div>

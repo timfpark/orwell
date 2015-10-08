@@ -1,28 +1,29 @@
-"use strict";
+'use strict';
 
 var projects = [];
-projects.push({ projectName: 'Guide Dogs', allocation: 20 });
+projects.push({ projectName: 'Guide Dogs', allocation: 20, notes: 'This project is going great!' });
 
 var TimeCard = React.createClass({
-  displayName: "TimeCard",
+  displayName: 'TimeCard',
 
   render: function render() {
     return React.createElement(
-      "div",
+      'div',
       null,
       React.createElement(
-        "form",
+        'form',
         null,
         React.createElement(UserCard, null),
         React.createElement(NewProject, null),
-        React.createElement(ProjectCard, { projectName: projects[0].projectName, allocation: projects[0].allocation })
+        React.createElement(ProjectCard, { projectName: projects[0].projectName, allocation: projects[0].allocation,
+          notes: projects[0].notes })
       )
     );
   }
 });
 
 var UserCard = React.createClass({
-  displayName: "UserCard",
+  displayName: 'UserCard',
 
   render: function render() {
     var chartInitialData = [{ label: "Project Bethesda", value: 22 }, { label: "Guide-Dogs", value: 60 }, { label: "Docker Hackfest", value: 18 }];
@@ -32,68 +33,68 @@ var UserCard = React.createClass({
     var defaultChartColors = ['#6bafbd', '#65cea7', '#f3ce85', '#fc8675'];
 
     return React.createElement(
-      "div",
-      { className: "app-container" },
+      'div',
+      { className: 'app-container' },
       React.createElement(
-        "div",
-        { className: "container-fluid" },
+        'div',
+        { className: 'container-fluid' },
         React.createElement(
-          "div",
-          { className: "row" },
+          'div',
+          { className: 'row' },
           React.createElement(
-            "div",
-            { className: "col-md-12 userHeader clearfix" },
+            'div',
+            { className: 'col-md-12 userHeader clearfix' },
             React.createElement(
-              "div",
+              'div',
               null,
               React.createElement(
-                "div",
-                { className: "page-title" },
+                'div',
+                { className: 'page-title' },
                 React.createElement(
-                  "div",
-                  { className: "page-title" },
+                  'div',
+                  { className: 'page-title' },
                   React.createElement(
-                    "h3",
-                    { className: "no-margin" },
-                    React.createElement("img", { src: "assets/icon_grey_office365.png", width: "30", height: "30" }),
-                    "Erik Schlegel"
+                    'h3',
+                    { className: 'no-margin' },
+                    React.createElement('img', { src: 'assets/icon_grey_office365.png', width: '30', height: '30' }),
+                    'Erik Schlegel'
                   ),
                   React.createElement(
-                    "span",
-                    { className: "dateLabel" },
-                    "Week of October 5th"
+                    'span',
+                    { className: 'dateLabel' },
+                    'Week of October 5th'
                   )
                 ),
                 React.createElement(
-                  "ul",
-                  { className: "page-stats" },
+                  'ul',
+                  { className: 'page-stats' },
                   React.createElement(
-                    "li",
+                    'li',
                     null,
                     React.createElement(
-                      "div",
-                      { className: "value" },
+                      'div',
+                      { className: 'value' },
                       React.createElement(
-                        "span",
+                        'span',
                         null,
-                        "Active Projects"
+                        'Active Projects'
                       ),
                       React.createElement(
-                        "h4",
-                        { id: "currentVisitor" },
-                        "3"
+                        'h4',
+                        { id: 'currentVisitor' },
+                        '3'
                       )
                     )
                   ),
                   React.createElement(
-                    "li",
+                    'li',
                     null,
                     React.createElement(ResourceDonutChart, { data: chartInitialData, formatter: formatter,
                       colors: defaultChartColors })
                   )
                 )
               ),
-              React.createElement("div", { className: "collapse navbar-collapse", id: "navbar-collapse2" })
+              React.createElement('div', { className: 'collapse navbar-collapse', id: 'navbar-collapse2' })
             )
           )
         )
@@ -103,7 +104,7 @@ var UserCard = React.createClass({
 });
 
 var ResourceDonutChart = React.createClass({
-  displayName: "ResourceDonutChart",
+  displayName: 'ResourceDonutChart',
 
   getInitialState: function getInitialState() {
     var chartData = this.props.data || [];
@@ -128,16 +129,22 @@ var ResourceDonutChart = React.createClass({
   },
 
   render: function render() {
-    return React.createElement("div", { id: "projectChart", className: "chartStyle" });
+    return React.createElement('div', { id: 'projectChart', className: 'chartStyle' });
   }
 });
 
 var ProjectCard = React.createClass({
-  displayName: "ProjectCard",
+  displayName: 'ProjectCard',
 
   getInitialState: function getInitialState() {
+    var noteCharCount = this.props.notes ? this.props.notes.length : 0;
+    var noteCharAllowed = 160;
+    var charRemaining = noteCharAllowed - noteCharCount;
+
     return { allocation: this.props.allocation || 0,
-      projectName: this.props.projectName || '' };
+      projectName: this.props.projectName || '',
+      notes: this.props.notes || '',
+      noteCharRemaining: charRemaining };
   },
 
   componentDidMount: function componentDidMount() {
@@ -154,99 +161,133 @@ var ProjectCard = React.createClass({
     });
   },
 
+  onNotesChange: function onNotesChange(ev) {
+    var newTextCount = ev.target.value.length;
+    this.setState({ noteCharRemaining: 160 - newTextCount });
+  },
+
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "row" },
+      'div',
+      { className: 'row' },
       React.createElement(
-        "div",
-        { className: "col-md-8 col-xs-8" },
+        'div',
+        { className: 'col-md-8 col-xs-8' },
         React.createElement(
-          "div",
-          { className: "panel panel-default projectcard-panel" },
+          'div',
+          { className: 'panel panel-default projectcard-panel' },
           React.createElement(
-            "div",
-            { className: "panel-heading project-panel-heading" },
-            React.createElement("img", { height: "30", width: "30", className: "project-icon", src: "assets/project_icon.png" }),
+            'div',
+            { className: 'panel-heading project-panel-heading' },
+            React.createElement('img', { height: '30', width: '30', className: 'project-icon', src: 'assets/project_icon.png' }),
             React.createElement(
-              "a",
-              { href: "#" },
-              React.createElement("i", { className: "fa fa-times-circle pull-right", style: { 'color': 'red' } })
+              'a',
+              { href: '#' },
+              React.createElement('i', { className: 'fa fa-times-circle pull-right', style: { 'color': 'red' } })
             ),
             React.createElement(
-              "h4",
-              { className: "project-title-label" },
+              'h4',
+              { className: 'project-title-label' },
               React.createElement(
-                "span",
+                'span',
                 null,
                 this.state.projectName
               ),
               React.createElement(
-                "small",
-                { className: "project-panel-heading-description" },
+                'small',
+                { className: 'project-panel-heading-description' },
                 this.state.allocation,
-                "%"
+                '%'
               )
             )
           ),
           React.createElement(
-            "div",
-            { className: "panel-body project-panel-body" },
+            'div',
+            { className: 'panel-body project-panel-body' },
             React.createElement(
-              "div",
-              { className: "project-panel-project-attribute" },
+              'div',
+              { className: 'project-panel-project-attribute' },
               React.createElement(
-                "span",
+                'span',
                 null,
-                "Time Allocation:"
+                'Time Allocation:'
               ),
               React.createElement(
-                "span",
-                { className: "project-panel-slider-container" },
-                React.createElement("input", { type: "text", className: "span2", value: "", "data-slider-min": "0", "data-slider-max": "100", "data-slider-step": "5", "data-slider-value": this.state.allocation, "data-slider-id": "BC", id: "time-slide", "data-slider-handle": "triangle" })
+                'span',
+                { className: 'project-panel-slider-container' },
+                React.createElement('input', { type: 'text', className: 'span2', value: '', 'data-slider-min': '0', 'data-slider-max': '100', 'data-slider-step': '5', 'data-slider-value': this.state.allocation, 'data-slider-id': 'BC', id: 'time-slide', 'data-slider-handle': 'triangle' })
               )
             )
           ),
           React.createElement(
-            "div",
-            { className: "btn-group health-button-group", "data-toggle": "buttons" },
+            'div',
+            { className: 'btn-group health-button-group', 'data-toggle': 'buttons' },
             React.createElement(
-              "label",
-              { className: "btn btn-default" },
+              'label',
+              { className: 'btn btn-default' },
               React.createElement(
-                "input",
-                { type: "radio", id: "q156", name: "health", value: "1", selected: true },
+                'input',
+                { type: 'radio', id: 'q156', name: 'health', value: '1', selected: true },
                 React.createElement(
-                  "span",
+                  'span',
                   null,
-                  React.createElement("img", { width: "30", height: "30", src: "assets/happy_emoji.png" })
+                  React.createElement('img', { width: '30', height: '30', src: 'assets/happy_emoji.png' })
                 )
               )
             ),
             React.createElement(
-              "label",
-              { className: "btn btn-default active" },
+              'label',
+              { className: 'btn btn-default active' },
               React.createElement(
-                "input",
-                { type: "radio", id: "q157", name: "health", value: "2", checked: "" },
+                'input',
+                { type: 'radio', id: 'q157', name: 'health', value: '2', checked: '' },
                 React.createElement(
-                  "span",
+                  'span',
                   null,
-                  React.createElement("img", { width: "30", height: "30", src: "assets/sad_emoji.png" })
+                  React.createElement('img', { width: '30', height: '30', src: 'assets/sad_emoji.png' })
                 )
               )
             ),
             React.createElement(
-              "label",
-              { className: "btn btn-default" },
+              'label',
+              { className: 'btn btn-default' },
               React.createElement(
-                "input",
-                { type: "radio", id: "q158", name: "health", value: "3" },
+                'input',
+                { type: 'radio', id: 'q158', name: 'health', value: '3' },
                 React.createElement(
-                  "span",
+                  'span',
                   null,
-                  React.createElement("img", { width: "30", height: "30", src: "assets/angry_emoji.jpg" })
+                  React.createElement('img', { width: '30', height: '30', src: 'assets/angry_emoji.jpg' })
                 )
+              )
+            )
+          ),
+          React.createElement(
+            'div',
+            { className: 'panel-body project-panel-body' },
+            React.createElement(
+              'div',
+              { className: 'project-panel-project-attribute' },
+              React.createElement(
+                'span',
+                null,
+                'Notes:(',
+                React.createElement(
+                  'i',
+                  null,
+                  this.state.noteCharRemaining,
+                  ' characters remaining'
+                ),
+                ')'
+              )
+            ),
+            React.createElement(
+              'div',
+              null,
+              React.createElement(
+                'textarea',
+                { className: 'form-control', rows: '3', id: 'comment', onChange: this.onNotesChange },
+                this.state.notes
               )
             )
           )
@@ -257,23 +298,23 @@ var ProjectCard = React.createClass({
 });
 
 var NewProject = React.createClass({
-  displayName: "NewProject",
+  displayName: 'NewProject',
 
   render: function render() {
     return React.createElement(
-      "div",
-      { className: "row" },
+      'div',
+      { className: 'row' },
       React.createElement(
-        "div",
-        { className: "col-md-12" },
+        'div',
+        { className: 'col-md-12' },
         React.createElement(
-          "div",
-          { className: "actionbar-wrapper" },
+          'div',
+          { className: 'actionbar-wrapper' },
           React.createElement(
-            "button",
-            { type: "button", className: "btn btn-success btn-sm" },
-            React.createElement("span", { "class": "glyphicon glyphicon-star", "aria-hidden": "true" }),
-            "Add Project"
+            'button',
+            { type: 'button', className: 'btn btn-success btn-sm' },
+            React.createElement('span', { 'class': 'glyphicon glyphicon-star', 'aria-hidden': 'true' }),
+            'Add Project'
           )
         )
       )
