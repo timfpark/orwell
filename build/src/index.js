@@ -172,7 +172,8 @@ var ProjectCard = React.createClass({
 
   onNotesChange: function onNotesChange(ev) {
     var newTextCount = ev.target.value.length;
-    this.setState({ noteCharRemaining: 160 - newTextCount });
+    var noteCharAllowed = 160;
+    this.setState({ noteCharRemaining: noteCharAllowed - newTextCount });
   },
 
   render: function render() {
@@ -282,14 +283,13 @@ var ProjectCard = React.createClass({
               React.createElement(
                 'span',
                 null,
-                'Notes:(',
+                'Notes: ',
                 React.createElement(
-                  'i',
+                  'small',
                   null,
                   this.state.noteCharRemaining,
                   ' characters remaining'
-                ),
-                ')'
+                )
               )
             ),
             React.createElement(

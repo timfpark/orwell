@@ -139,8 +139,9 @@ var ProjectCard = React.createClass({
   },
 
   onNotesChange: function(ev){
-     var newTextCount = ev.target.value.length
-     this.setState({noteCharRemaining: 160 - newTextCount});
+     var newTextCount = ev.target.value.length;
+     var noteCharAllowed = 160;
+     this.setState({noteCharRemaining: noteCharAllowed - newTextCount});
   },
 
   render: function() {
@@ -179,7 +180,7 @@ var ProjectCard = React.createClass({
                   </div>
                   <div className="panel-body project-panel-body">
                         <div className="project-panel-project-attribute" >
-                            <span>Notes:(<i>{this.state.noteCharRemaining} characters remaining</i>)</span>
+                            <span>Notes: <small>{this.state.noteCharRemaining} characters remaining</small></span>
                         </div>
                         <div>
                              <textarea className="form-control" rows="3" id="comment" onChange={this.onNotesChange}>

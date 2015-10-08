@@ -161,6 +161,12 @@ body{
     font-weight: 600;
 }
 
+.project-panel-project-attribute span small{
+    font-weight: 400;
+    text-align: left;
+    font-size: 13px;
+}
+
 .project-time-slider{
 
 }
