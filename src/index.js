@@ -1,8 +1,4 @@
-if(typeof Office != 'undefined'){
-  Office.initialize = function (reason) {
-    $(document).ready(function () {});
-  };
-}
+Office.initialize = function (reason) {};
 
 var TimeCard = React.createClass({
   getInitialState: function() {
@@ -42,7 +38,7 @@ var TimeCard = React.createClass({
 var UserCard = React.createClass({
   getInitialState: function() {
     var defaultUsername = "Erik Schlegel";
-    var userName = defaultUsername;//(typeof Office != 'undefined' && typeof Office.context != 'undefined')?Office.context.mailbox.userProfile.displayName:defaultUsername;
+    var userName = (typeof Office != 'undefined' && typeof Office.context != 'undefined')?Office.context.mailbox.userProfile.displayName:defaultUsername;
 
     return{userDisplayName: userName, projects: this.props.projects || []};
   },
