@@ -1,3 +1,7 @@
+//Office.initialize = function (reason) {
+//    $(document).ready(function () {});
+//};
+
 var projects = [
   {
     projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!'
@@ -18,12 +22,18 @@ var TimeCard = React.createClass({
             <UserCard>
             </UserCard>
             <NewProject />
-            {
-              projects.map(function(project, index){
-                  return <ProjectCard projectName={project.projectName} allocation={project.allocation}
-                                      notes={project.notes} id={index}/>
-              })
-            }
+            <div className="app-container">
+              <div className="container-fluid">
+                <div className="row">
+                  {
+                    projects.map(function(project, index){
+                        return <ProjectCard projectName={project.projectName} allocation={project.allocation}
+                                            notes={project.notes} id={index}/>
+                    })
+                  }
+              </div>
+            </div>
+          </div>
           </form>
         </div>
     );
@@ -31,6 +41,11 @@ var TimeCard = React.createClass({
 });
 
 var UserCard = React.createClass({
+  getInitialState: function() {
+    var displayName = '';
+     return{userDisplayName: displayName};
+  },
+
   render: function() {
     var chartInitialData = [
         {label: "Project Bethesda", value: 22},
@@ -46,9 +61,6 @@ var UserCard = React.createClass({
       ];
 
     return (
-      <div className="app-container">
-        <div className="container-fluid">
-          <div className="row">
                <div className="col-md-12 userHeader clearfix">
                  <div>
                    <div className="page-title">
@@ -73,9 +85,6 @@ var UserCard = React.createClass({
                    </div>
                 </div>
               </div>
-          </div>
-        </div>
-      </div>
     );
   }
 });
@@ -148,8 +157,7 @@ var ProjectCard = React.createClass({
     var sliderId = 'time-slide' + this.props.id;
 
     return (
-      <div className="row">
-          <div className="col-md-8 col-xs-8">
+          <div className="col-md-4 col-xs-4">
               <div className="panel panel-default projectcard-panel">
                   <div className="panel-heading project-panel-heading">
                         <img height="30" width="30" className="project-icon" src="assets/project_icon.png" />
@@ -183,14 +191,13 @@ var ProjectCard = React.createClass({
                             <span>Notes: <small>{this.state.noteCharRemaining} characters remaining</small></span>
                         </div>
                         <div>
-                             <textarea className="form-control" rows="3" id="comment" onChange={this.onNotesChange}>
+                             <textarea className="form-control" rows="2" id="comment" onChange={this.onNotesChange}>
                                 {this.state.notes}
                              </textarea>
                         </div>
                   </div>
               </div>
           </div>
-      </div>
     );
   }
 });
@@ -202,7 +209,11 @@ var NewProject = React.createClass({
         <div className="col-md-12">
             <div className="actionbar-wrapper">
                 <button type="button" className="btn btn-success btn-sm">
-                   <span class="glyphicon glyphicon-star" aria-hidden="true"></span>Add Project
+                   <span className="fa fa-plus-circle fa-lg" aria-hidden="true"></span>&nbsp;Add Project
+                </button>
+                &nbsp;&nbsp;
+                <button type="button" className="btn btn-primary btn-sm">
+                   <span className="fa fa-cloud-upload" aria-hidden="true"></span>&nbsp;Save
                 </button>
             </div>
         </div>
