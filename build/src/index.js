@@ -6,17 +6,15 @@ if (typeof Office != 'undefined') {
   };
 }
 
-var projects = [{
-  projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!'
-}, {
-  projectName: 'Project Bethesda', allocation: 22, notes: 'Killing it!'
-}, {
-  projectName: 'Docker Hackfest', allocation: 18, notes: ''
-}];
-
 var TimeCard = React.createClass({
   displayName: 'TimeCard',
 
+  getInitialState: function getInitialState() {
+    TimeCard.instance = this;
+    return {
+      projects: [{ projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!' }, { projectName: 'Project Bethesda', allocation: 22, notes: 'Killing it!' }, { projectName: 'Docker Hackfest', allocation: 18, notes: '' }]
+    };
+  },
   render: function render() {
     return React.createElement(
       'div',
@@ -24,7 +22,7 @@ var TimeCard = React.createClass({
       React.createElement(
         'form',
         null,
-        React.createElement(UserCard, null),
+        React.createElement(UserCard, { projects: this.state.projects }),
         React.createElement(NewProject, null),
         React.createElement(
           'div',
@@ -35,7 +33,7 @@ var TimeCard = React.createClass({
             React.createElement(
               'div',
               { className: 'row' },
-              projects.map(function (project, index) {
+              this.state.projects.map(function (project, index) {
                 return React.createElement(ProjectCard, { projectName: project.projectName, allocation: project.allocation,
                   notes: project.notes, id: index });
               })
@@ -52,13 +50,20 @@ var UserCard = React.createClass({
 
   getInitialState: function getInitialState() {
     var defaultUsername = "Erik Schlegel";
-    var userName = typeof Office != 'undefined' ? Office.context.mailbox.userProfile.displayName : defaultUsername;
+    var userName = typeof Office != 'undefined' && typeof Office.context != 'undefined' ? Office.context.mailbox.userProfile.displayName : defaultUsername;
 
-    return { userDisplayName: userName };
+    return { userDisplayName: userName, projects: this.props.projects || [] };
   },
 
   render: function render() {
-    var chartInitialData = [{ label: "Project Bethesda", value: 22 }, { label: "Guide-Dogs", value: 60 }, { label: "Docker Hackfest", value: 18 }];
+    var chartInitialData = [];
+
+    if (this.state.projects) {
+      this.state.projects.map(function (project) {
+        chartInitialData.push({ label: project.projectName, value: project.allocation });
+      });
+    }
+
     var formatter = function formatter(x) {
       return x + "%";
     };
@@ -127,28 +132,39 @@ var ResourceDonutChart = React.createClass({
   displayName: 'ResourceDonutChart',
 
   getInitialState: function getInitialState() {
+    ResourceDonutChart.instance = this;
+
     var chartData = this.props.data || [];
 
     return { chartData: chartData,
       formatter: this.props.formatter || false,
-      colors: this.props.colors || false };
+      colors: this.props.colors || false,
+      chart: false };
   },
 
   componentDidMount: function componentDidMount() {
     var self = this;
 
     if (this.state.chartData) {
-      Morris.Donut({
+      var chart = Morris.Donut({
         element: React.findDOMNode(self),
         data: this.state.chartData,
         resize: true,
         formatter: this.state.formatter,
         colors: this.state.colors
       });
+
+      this.setState({ chart: chart });
     }
   },
 
+  refreshDonutChart: function refreshDonutChart() {
+    if (this.state.chart) this.state.chart.setData(this.state.chartData);
+  },
+
   render: function render() {
+    this.refreshDonutChart();
+
     return React.createElement('div', { id: 'projectChart', className: 'chartStyle' });
   }
 });
@@ -180,6 +196,14 @@ var ProjectCard = React.createClass({
 
     slider.on('slide', function (item) {
       self.setState({ allocation: item });
+      var chartData = ResourceDonutChart.instance.state.chartData;
+      var newChart = chartData.map(function (chartItem) {
+        if (chartItem.label == self.state.projectName) chartItem.value = item;
+
+        return chartItem;
+      });
+
+      ResourceDonutChart.instance.setState({ chartData: newChart });
     });
   },
 
@@ -320,6 +344,17 @@ var ProjectCard = React.createClass({
 var NewProject = React.createClass({
   displayName: 'NewProject',
 
+  newProject: function newProject(event) {
+    var projects = TimeCard.instance.state.projects;
+    projects.push({
+      projectName: 'New Project', allocation: 20, notes: 'Initial Commit'
+    });
+
+    TimeCard.instance.setState({
+      projects: projects
+    });
+  },
+
   render: function render() {
     return React.createElement(
       'div',
@@ -332,7 +367,7 @@ var NewProject = React.createClass({
           { className: 'actionbar-wrapper' },
           React.createElement(
             'button',
-            { type: 'button', className: 'btn btn-success btn-sm' },
+            { type: 'button', className: 'btn btn-success btn-sm', onClick: this.newProject },
             React.createElement('span', { className: 'fa fa-plus-circle fa-lg', 'aria-hidden': 'true' }),
             ' Add Project'
           ),

@@ -19,8 +19,7 @@ var TimeCard = React.createClass({
     return (
         <div>
           <form>
-            <UserCard>
-            </UserCard>
+            <UserCard projects={this.state.projects} />
             <NewProject />
             <div className="app-container">
               <div className="container-fluid">
@@ -43,17 +42,20 @@ var TimeCard = React.createClass({
 var UserCard = React.createClass({
   getInitialState: function() {
     var defaultUsername = "Erik Schlegel";
-    var userName = (typeof Office != 'undefined')?Office.context.mailbox.userProfile.displayName:defaultUsername;
+    var userName = (typeof Office != 'undefined' && typeof Office.context != 'undefined')?Office.context.mailbox.userProfile.displayName:defaultUsername;
 
-    return{userDisplayName: userName};
+    return{userDisplayName: userName, projects: this.props.projects || []};
   },
 
   render: function() {
-    var chartInitialData = [
-        {label: "Project Bethesda", value: 22},
-        {label: "Guide-Dogs", value: 60},
-        {label: "Docker Hackfest", value: 18}
-      ];
+    var chartInitialData = [];
+
+    if(this.state.projects){
+      this.state.projects.map(function(project){
+          chartInitialData.push({label: project.projectName, value: project.allocation});
+      });
+    }
+
     var formatter = function (x) { return x + "%"};
     var defaultChartColors = [
         '#6bafbd',
@@ -93,28 +95,40 @@ var UserCard = React.createClass({
 
 var ResourceDonutChart = React.createClass({
   getInitialState: function() {
+    ResourceDonutChart.instance = this;
+
     var chartData =this.props.data || [];
 
      return{chartData: chartData,
             formatter: this.props.formatter || false,
-            colors: this.props.colors || false};
+            colors: this.props.colors || false,
+            chart: false};
   },
 
   componentDidMount: function () {
     var self = this;
 
     if(this.state.chartData){
-        Morris.Donut({
+        var chart = Morris.Donut({
            element: React.findDOMNode(self),
            data: this.state.chartData,
            resize: true,
            formatter: this.state.formatter,
            colors: this.state.colors
-         })
+         });
+
+        this.setState({chart: chart});
      }
   },
 
+  refreshDonutChart(){
+    if(this.state.chart)
+       this.state.chart.setData(this.state.chartData);
+  },
+
   render: function() {
+    this.refreshDonutChart();
+
     return (
        <div id="projectChart" className="chartStyle" />
     );
@@ -146,6 +160,15 @@ var ProjectCard = React.createClass({
 
       slider.on('slide', function(item){
         self.setState({allocation: item});
+        var chartData = ResourceDonutChart.instance.state.chartData;
+        var newChart = chartData.map(function(chartItem){
+            if(chartItem.label == self.state.projectName)
+               chartItem.value = item;
+
+            return chartItem;
+        });
+
+        ResourceDonutChart.instance.setState({chartData:newChart});
       });
   },
 
