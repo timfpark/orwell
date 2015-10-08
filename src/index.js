@@ -2,19 +2,17 @@
 //    $(document).ready(function () {});
 //};
 
-var projects = [
-  {
-    projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!'
-  },
-  {
-    projectName: 'Project Bethesda', allocation: 22, notes: 'Killing it!'
-  },
-  {
-    projectName: 'Docker Hackfest', allocation: 18, notes: ''
-  }
-];
-
 var TimeCard = React.createClass({
+  getInitialState: function() {
+    TimeCard.instance = this;
+    return {
+      projects: [
+        { projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!' },
+        { projectName: 'Project Bethesda', allocation: 22, notes: 'Killing it!' },
+        { projectName: 'Docker Hackfest', allocation: 18, notes: '' }
+      ]
+    };
+  },
   render: function() {
     return (
         <div>
@@ -26,7 +24,7 @@ var TimeCard = React.createClass({
               <div className="container-fluid">
                 <div className="row">
                   {
-                    projects.map(function(project, index){
+                    this.state.projects.map(function(project, index){
                         return <ProjectCard projectName={project.projectName} allocation={project.allocation}
                                             notes={project.notes} id={index}/>
                     })
@@ -203,12 +201,23 @@ var ProjectCard = React.createClass({
 });
 
 var NewProject = React.createClass({
+  newProject: function(event) {
+    var projects = TimeCard.instance.state.projects;
+    projects.push({
+      projectName: 'New Project', allocation: 20, notes: 'Initial Commit'
+    });
+
+    TimeCard.instance.setState({
+      projects: projects
+    });
+  },
+
   render: function() {
     return (
       <div className="row">
         <div className="col-md-12">
             <div className="actionbar-wrapper">
-                <button type="button" className="btn btn-success btn-sm">
+                <button type="button" className="btn btn-success btn-sm" onClick={this.newProject}>
                    <span className="fa fa-plus-circle fa-lg" aria-hidden="true"></span>&nbsp;Add Project
                 </button>
                 &nbsp;&nbsp;
