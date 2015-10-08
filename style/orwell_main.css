@@ -68,9 +68,9 @@
 }
 
 .chartStyle{
-  width:125px;
+  width:144px;
   margin-left:40px;
-  height:125px;
+  height:144px;
 }
 
 .profile-navbar{
@@ -86,7 +86,7 @@ body{
 .actionbar-wrapper{
     background: #eee;
     padding: 15px;
-    margin-top: 18px;
+    margin-top: 0px;
     border: 1px solid #dfdfdf;
     border-width: 1px 0;
     text-align: left;
