@@ -1,7 +1,12 @@
 'use strict';
 
-var projects = [];
-projects.push({ projectName: 'Guide Dogs', allocation: 20, notes: 'This project is going great!' });
+var projects = [{
+  projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!'
+}, {
+  projectName: 'Project Bethesda', allocation: 22, notes: 'Killing it!'
+}, {
+  projectName: 'Docker Hackfest', allocation: 18, notes: ''
+}];
 
 var TimeCard = React.createClass({
   displayName: 'TimeCard',
@@ -15,8 +20,10 @@ var TimeCard = React.createClass({
         null,
         React.createElement(UserCard, null),
         React.createElement(NewProject, null),
-        React.createElement(ProjectCard, { projectName: projects[0].projectName, allocation: projects[0].allocation,
-          notes: projects[0].notes })
+        projects.map(function (project, index) {
+          return React.createElement(ProjectCard, { projectName: project.projectName, allocation: project.allocation,
+            notes: project.notes, id: index });
+        })
       )
     );
   }
@@ -149,8 +156,10 @@ var ProjectCard = React.createClass({
 
   componentDidMount: function componentDidMount() {
     var self = this;
+    var index = this.props.id;
+    var sliderId = '#time-slide' + index;
 
-    var slider = new Slider('#time-slide', {
+    var slider = new Slider(sliderId, {
       formatter: function formatter(value) {
         return 'Current value: ' + value + '%';
       }
@@ -167,6 +176,8 @@ var ProjectCard = React.createClass({
   },
 
   render: function render() {
+    var sliderId = 'time-slide' + this.props.id;
+
     return React.createElement(
       'div',
       { className: 'row' },
@@ -215,7 +226,7 @@ var ProjectCard = React.createClass({
               React.createElement(
                 'span',
                 { className: 'project-panel-slider-container' },
-                React.createElement('input', { type: 'text', className: 'span2', value: '', 'data-slider-min': '0', 'data-slider-max': '100', 'data-slider-step': '5', 'data-slider-value': this.state.allocation, 'data-slider-id': 'BC', id: 'time-slide', 'data-slider-handle': 'triangle' })
+                React.createElement('input', { type: 'text', className: 'span2', value: '', 'data-slider-min': '0', 'data-slider-max': '100', 'data-slider-step': '5', 'data-slider-value': this.state.allocation, 'data-slider-id': 'BC', id: sliderId, 'data-slider-handle': 'triangle' })
               )
             )
           ),
