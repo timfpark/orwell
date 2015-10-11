@@ -209,9 +209,7 @@ var ProjectCard = React.createClass({
                             <span>Notes: <small>{this.state.noteCharRemaining} remaining</small></span>
                         </div>
                         <div>
-                             <textarea className="form-control" rows="2" id="comment" onChange={this.onNotesChange}>
-                                {currentProject.notes}
-                             </textarea>
+                             <textarea defaultValue={currentProject.notes} className="form-control" rows="2" id="comment" onChange={this.onNotesChange} />
                         </div>
                   </div>
               </div>

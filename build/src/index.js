@@ -292,11 +292,7 @@ var ProjectCard = React.createClass({
           React.createElement(
             "div",
             null,
-            React.createElement(
-              "textarea",
-              { className: "form-control", rows: "2", id: "comment", onChange: this.onNotesChange },
-              currentProject.notes
-            )
+            React.createElement("textarea", { defaultValue: currentProject.notes, className: "form-control", rows: "2", id: "comment", onChange: this.onNotesChange })
           )
         )
       )

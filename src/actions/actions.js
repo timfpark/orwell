@@ -15,8 +15,8 @@ var methods = {
         var self = this;
         var defaultUsername = "Erik Schlegel";
         var defaultUserEmail = "erisch@microsoft.com"
-        var userName = defaultUsername;//(typeof Office != 'undefined' && typeof Office.context != 'undefined')?Office.context.mailbox.userProfile.displayName:defaultUsername;
-        var emailAddress = defaultUserEmail;//(typeof Office != 'undefined' && typeof Office.context != 'undefined')?Office.context.mailbox.userProfile.emailAddress:defaultUserEmail;
+        var userName = (typeof Office != 'undefined' && typeof Office.context != 'undefined')?Office.context.mailbox.userProfile.displayName:defaultUsername;
+        var emailAddress = (typeof Office != 'undefined' && typeof Office.context != 'undefined')?Office.context.mailbox.userProfile.emailAddress:defaultUserEmail;
         var userAlias = (emailAddress && emailAddress.indexOf('@') != -1)?emailAddress.substring(0, emailAddress.indexOf('@')):"erisch";
 
         var serviceCB = {
