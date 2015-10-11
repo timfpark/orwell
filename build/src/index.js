@@ -1,36 +1,44 @@
-'use strict';
+"use strict";
 
-Office.initialize = function (reason) {};
+var FluxMixin = Fluxxor.FluxMixin(React),
+    StoreWatchMixin = Fluxxor.StoreWatchMixin("Projects");
 
 var TimeCard = React.createClass({
-  displayName: 'TimeCard',
+  displayName: "TimeCard",
+
+  mixins: [FluxMixin, StoreWatchMixin],
 
   getInitialState: function getInitialState() {
-    TimeCard.instance = this;
-    return {
-      projects: [{ projectName: 'Guide Dogs', allocation: 60, notes: 'This project is going great!' }, { projectName: 'Project Bethesda', allocation: 22, notes: 'Killing it!' }, { projectName: 'Docker Hackfest', allocation: 18, notes: '' }]
-    };
+    this.getFlux().actions.PROJECT.init_load();
   },
+
+  getStateFromFlux: function getStateFromFlux() {
+    return this.getFlux().store("Projects").getState();
+  },
+
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+    this.setState(this.getStateFromFlux());
+  },
+
   render: function render() {
     return React.createElement(
-      'div',
+      "div",
       null,
       React.createElement(
-        'form',
+        "form",
         null,
         React.createElement(
-          'div',
-          { className: 'app-container' },
+          "div",
+          { className: "app-container" },
           React.createElement(
-            'div',
-            { className: 'container-fluid' },
+            "div",
+            { className: "container-fluid" },
             React.createElement(
-              'div',
-              { className: 'row' },
+              "div",
+              { className: "row" },
               React.createElement(UserCard, { projects: this.state.projects }),
               this.state.projects.map(function (project, index) {
-                return React.createElement(ProjectCard, { projectName: project.projectName, allocation: project.allocation,
-                  notes: project.notes, id: index });
+                return React.createElement(ProjectCard, { project: project, id: index });
               })
             )
           )
@@ -41,71 +49,57 @@ var TimeCard = React.createClass({
 });
 
 var UserCard = React.createClass({
-  displayName: 'UserCard',
+  displayName: "UserCard",
 
-  getInitialState: function getInitialState() {
-    var defaultUsername = "Erik Schlegel";
-    var userName = typeof Office != 'undefined' && typeof Office.context != 'undefined' ? Office.context.mailbox.userProfile.displayName : defaultUsername;
-
-    return { userDisplayName: userName, projects: this.props.projects || [] };
-  },
+  mixins: [FluxMixin],
 
   render: function render() {
-    var chartInitialData = [];
-
-    if (this.state.projects) {
-      this.state.projects.map(function (project) {
-        chartInitialData.push({ label: project.projectName, value: project.allocation });
-      });
-    }
-
     var formatter = function formatter(x) {
       return x + "%";
     };
     var defaultChartColors = ['#6bafbd', '#65cea7', '#f3ce85', '#fc8675'];
 
     return React.createElement(
-      'div',
-      { className: 'col-md-3 col-xs-3 userHeader clearfix' },
+      "div",
+      { className: "col-md-3 col-xs-3 userHeader clearfix" },
       React.createElement(
-        'div',
+        "div",
         null,
         React.createElement(
-          'div',
-          { className: 'page-title' },
+          "div",
+          { className: "page-title" },
           React.createElement(
-            'ul',
-            { className: 'page-stats' },
+            "ul",
+            { className: "page-stats" },
             React.createElement(
-              'li',
+              "li",
               null,
               React.createElement(
-                'div',
-                { className: 'value' },
+                "div",
+                { className: "value" },
                 React.createElement(
-                  'span',
+                  "span",
                   null,
-                  'Active Projects'
+                  "Active Projects"
                 ),
                 React.createElement(
-                  'h4',
-                  { id: 'currentVisitor' },
-                  this.state.projects.length
+                  "h4",
+                  { id: "currentVisitor" },
+                  this.props.projects.length
                 )
               )
             ),
             React.createElement(
-              'li',
+              "li",
               null,
-              React.createElement(ResourceDonutChart, { data: chartInitialData, formatter: formatter,
-                colors: defaultChartColors })
+              React.createElement(ResourceDonutChart, { formatter: formatter, colors: defaultChartColors })
             )
           )
         ),
-        React.createElement('div', { className: 'collapse navbar-collapse', id: 'navbar-collapse2' })
+        React.createElement("div", { className: "collapse navbar-collapse", id: "navbar-collapse2" })
       ),
       React.createElement(
-        'div',
+        "div",
         null,
         React.createElement(NewProject, null)
       )
@@ -114,58 +108,49 @@ var UserCard = React.createClass({
 });
 
 var ResourceDonutChart = React.createClass({
-  displayName: 'ResourceDonutChart',
+  displayName: "ResourceDonutChart",
 
-  getInitialState: function getInitialState() {
-    ResourceDonutChart.instance = this;
+  mixins: [FluxMixin],
 
-    var chartData = this.props.data || [];
-
-    return { chartData: chartData,
-      formatter: this.props.formatter || false,
-      colors: this.props.colors || false,
-      chart: false };
-  },
-
-  componentDidMount: function componentDidMount() {
+  initializeChart: function initializeChart() {
+    var dataStore = this.getFlux().store("Projects").dataStore;
     var self = this;
 
-    if (this.state.chartData) {
-      var chart = Morris.Donut({
-        element: React.findDOMNode(self),
-        data: this.state.chartData,
-        resize: true,
-        formatter: this.state.formatter,
-        colors: this.state.colors
-      });
+    var chart = Morris.Donut({
+      element: React.findDOMNode(self),
+      data: dataStore.chartData,
+      resize: true,
+      formatter: this.props.formatter,
+      colors: this.props.colors
+    });
 
-      this.setState({ chart: chart });
-    }
+    dataStore.chartObject = chart;
   },
 
-  refreshDonutChart: function refreshDonutChart() {
-    if (this.state.chart) this.state.chart.setData(this.state.chartData);
+  chartRendered: function chartRendered() {
+    return this.getFlux().store("Projects").dataStore.chartObject;
+  },
+
+  componentWillReceiveProps: function componentWillReceiveProps() {
+    if (!this.chartRendered()) this.initializeChart();
   },
 
   render: function render() {
-    this.refreshDonutChart();
-
-    return React.createElement('div', { id: 'projectChart', className: 'chartStyle' });
+    return React.createElement("div", { id: "projectChart", className: "chartStyle" });
   }
 });
 
 var ProjectCard = React.createClass({
-  displayName: 'ProjectCard',
+  displayName: "ProjectCard",
+
+  mixins: [FluxMixin],
 
   getInitialState: function getInitialState() {
-    var noteCharCount = this.props.notes ? this.props.notes.length : 0;
+    var noteCharCount = this.props.project.notes ? this.props.project.notes.length : 0;
     var noteCharAllowed = 160;
     var charRemaining = noteCharAllowed - noteCharCount;
 
-    return { allocation: this.props.allocation || 0,
-      projectName: this.props.projectName || '',
-      notes: this.props.notes || '',
-      noteCharRemaining: charRemaining };
+    return { noteCharRemaining: charRemaining };
   },
 
   componentDidMount: function componentDidMount() {
@@ -180,15 +165,10 @@ var ProjectCard = React.createClass({
     });
 
     slider.on('slide', function (item) {
-      self.setState({ allocation: item });
-      var chartData = ResourceDonutChart.instance.state.chartData;
-      var newChart = chartData.map(function (chartItem) {
-        if (chartItem.label == self.state.projectName) chartItem.value = item;
+      var editedProjectItem = self.props;
+      editedProjectItem.project.timeAllocation = item;
 
-        return chartItem;
-      });
-
-      ResourceDonutChart.instance.setState({ chartData: newChart });
+      self.getFlux().actions.PROJECT.edit_project_item(editedProjectItem);
     });
   },
 
@@ -198,126 +178,124 @@ var ProjectCard = React.createClass({
     this.setState({ noteCharRemaining: noteCharAllowed - newTextCount });
   },
 
+  onRemoveProject: function onRemoveProject(ev) {
+    this.getFlux().actions.PROJECT.remove_project_item(this.props.project.projectName);
+  },
+
+  onChangeHealth: function onChangeHealth(ev) {
+    var selectedHealth = ev.currentTarget.value;
+    var currentProject = {};
+    currentProject.project = this.props.project;
+    currentProject.project.health = selectedHealth;
+
+    this.getFlux().actions.PROJECT.edit_project_item(currentProject);
+  },
+
   render: function render() {
     var sliderId = 'time-slide' + this.props.id;
+    var currentProject = this.props.project;
+    var self = this;
+
+    var emojiButtonGroup = [{ icon: 'assets/happy_emoji.png', value: 1 }, { icon: 'assets/sad_emoji.png', value: 2 }, { icon: 'assets/angry_emoji.jpg', value: 3 }];
 
     return React.createElement(
-      'div',
-      { className: 'col-md-3 col-xs-3 panel-container' },
+      "div",
+      { className: "col-md-3 col-xs-3 panel-container" },
       React.createElement(
-        'div',
-        { className: 'panel panel-default projectcard-panel' },
+        "div",
+        { className: "panel panel-default projectcard-panel" },
         React.createElement(
-          'div',
-          { className: 'panel-heading project-panel-heading' },
-          React.createElement('img', { height: '30', width: '30', className: 'project-icon', src: 'assets/project_icon.png' }),
+          "div",
+          { className: "panel-heading project-panel-heading" },
+          React.createElement("img", { height: "30", width: "30", className: "project-icon", src: "assets/project_icon.png" }),
           React.createElement(
-            'a',
-            { href: '#' },
-            React.createElement('i', { className: 'fa fa-times-circle pull-right', style: { 'color': 'red' } })
+            "a",
+            { href: "#", onClick: this.onRemoveProject },
+            React.createElement("i", { className: "fa fa-times-circle pull-right", style: { 'color': 'red' } })
           ),
           React.createElement(
-            'h4',
-            { className: 'project-title-label' },
+            "h4",
+            { className: "project-title-label" },
             React.createElement(
-              'span',
+              "span",
               null,
-              this.state.projectName
+              currentProject.projectName
             ),
             React.createElement(
-              'small',
-              { className: 'project-panel-heading-description' },
-              this.state.allocation,
-              '%'
+              "small",
+              { className: "project-panel-heading-description" },
+              currentProject.timeAllocation,
+              "%"
             )
           )
         ),
         React.createElement(
-          'div',
-          { className: 'panel-body project-panel-body' },
+          "div",
+          { className: "panel-body project-panel-body" },
           React.createElement(
-            'div',
-            { className: 'project-panel-project-attribute' },
+            "div",
+            { className: "project-panel-project-attribute" },
             React.createElement(
-              'span',
+              "span",
               null,
-              'Time Allocation:'
+              "Time Allocation:"
             ),
             React.createElement(
-              'span',
-              { className: 'project-panel-slider-container' },
-              React.createElement('input', { type: 'text', className: 'span2', value: '', 'data-slider-min': '0', 'data-slider-max': '100', 'data-slider-step': '5', 'data-slider-value': this.state.allocation, 'data-slider-id': 'BC', id: sliderId, 'data-slider-handle': 'triangle' })
+              "span",
+              { className: "project-panel-slider-container" },
+              React.createElement("input", { type: "text", className: "span2", value: "", "data-slider-min": "0", "data-slider-max": "100", "data-slider-step": "5", "data-slider-value": currentProject.timeAllocation, "data-slider-id": "BC", id: sliderId, "data-slider-handle": "triangle" })
             )
           )
         ),
         React.createElement(
-          'div',
-          { className: 'btn-group health-button-group', 'data-toggle': 'buttons' },
-          React.createElement(
-            'label',
-            { className: 'btn btn-default' },
-            React.createElement(
-              'input',
-              { type: 'radio', id: 'q156', name: 'health', value: '1', selected: true },
+          "div",
+          { className: "btn-group health-button-group", "data-toggle": "buttons" },
+          emojiButtonGroup.map(function (emoji, index) {
+            var defaultStyle = "btn btn-default";
+            var selectButton = emoji.value === currentProject.health ? " active" : "";
+            var style = defaultStyle + selectButton;
+            var elementId = "health" + index;
+
+            return React.createElement(
+              "label",
+              { className: style },
               React.createElement(
-                'span',
-                null,
-                React.createElement('img', { width: '30', height: '30', src: 'assets/happy_emoji.png' })
+                "input",
+                { type: "radio", id: elementId, onClick: self.onChangeHealth, name: "health", value: emoji.value },
+                React.createElement(
+                  "span",
+                  null,
+                  React.createElement("img", { width: "30", height: "30", src: emoji.icon })
+                )
               )
-            )
-          ),
-          React.createElement(
-            'label',
-            { className: 'btn btn-default active' },
-            React.createElement(
-              'input',
-              { type: 'radio', id: 'q157', name: 'health', value: '2', checked: '' },
-              React.createElement(
-                'span',
-                null,
-                React.createElement('img', { width: '30', height: '30', src: 'assets/sad_emoji.png' })
-              )
-            )
-          ),
-          React.createElement(
-            'label',
-            { className: 'btn btn-default' },
-            React.createElement(
-              'input',
-              { type: 'radio', id: 'q158', name: 'health', value: '3' },
-              React.createElement(
-                'span',
-                null,
-                React.createElement('img', { width: '30', height: '30', src: 'assets/angry_emoji.jpg' })
-              )
-            )
-          )
+            );
+          })
         ),
         React.createElement(
-          'div',
-          { className: 'panel-body project-panel-body' },
+          "div",
+          { className: "panel-body project-panel-body" },
           React.createElement(
-            'div',
-            { className: 'project-panel-project-attribute' },
+            "div",
+            { className: "project-panel-project-attribute" },
             React.createElement(
-              'span',
+              "span",
               null,
-              'Notes: ',
+              "Notes: ",
               React.createElement(
-                'small',
+                "small",
                 null,
                 this.state.noteCharRemaining,
-                ' remaining'
+                " remaining"
               )
             )
           ),
           React.createElement(
-            'div',
+            "div",
             null,
             React.createElement(
-              'textarea',
-              { className: 'form-control', rows: '2', id: 'comment', onChange: this.onNotesChange },
-              this.state.notes
+              "textarea",
+              { className: "form-control", rows: "2", id: "comment", onChange: this.onNotesChange },
+              currentProject.notes
             )
           )
         )
@@ -327,41 +305,46 @@ var ProjectCard = React.createClass({
 });
 
 var NewProject = React.createClass({
-  displayName: 'NewProject',
+  displayName: "NewProject",
+
+  mixins: [FluxMixin],
 
   newProject: function newProject(event) {
-    var projects = TimeCard.instance.state.projects;
-    projects.push({
-      projectName: 'New Project', allocation: 20, notes: 'Initial Commit'
+    this.getFlux().actions.PROJECT.add_project_item({
+      projectName: 'New Project', allocation: 5, notes: 'Add Some Notes'
     });
+  },
 
-    TimeCard.instance.setState({
-      projects: projects
+  onProjectsSave: function onProjectsSave(ev) {
+    var dataStore = this.getFlux().store("Projects").dataStore;
+
+    this.getFlux().actions.PROJECT.save_project({
+      projects: dataStore.projects, RowKey: dataStore.RowKey, PartitionKey: dataStore.PartitionKey
     });
   },
 
   render: function render() {
     return React.createElement(
-      'div',
-      { className: 'row' },
+      "div",
+      { className: "row" },
       React.createElement(
-        'div',
-        { className: 'col-md-12' },
+        "div",
+        { className: "col-md-12" },
         React.createElement(
-          'div',
-          { className: 'actionbar-wrapper' },
+          "div",
+          { className: "actionbar-wrapper" },
           React.createElement(
-            'button',
-            { type: 'button', className: 'btn btn-success btn-sm', onClick: this.newProject },
-            React.createElement('span', { className: 'fa fa-plus-circle fa-lg', 'aria-hidden': 'true' }),
-            ' Add Project'
+            "button",
+            { type: "button", className: "btn btn-success btn-sm", onClick: this.newProject },
+            React.createElement("span", { className: "fa fa-plus-circle fa-lg", "aria-hidden": "true" }),
+            " Add Project"
           ),
-          '  ',
+          "  ",
           React.createElement(
-            'button',
-            { type: 'button', className: 'btn btn-primary btn-sm' },
-            React.createElement('span', { className: 'fa fa-cloud-upload', 'aria-hidden': 'true' }),
-            ' Save'
+            "button",
+            { type: "button", className: "btn btn-primary btn-sm", onClick: this.onProjectsSave },
+            React.createElement("span", { className: "fa fa-cloud-upload", "aria-hidden": "true" }),
+            " Save"
           )
         )
       )
@@ -369,4 +352,14 @@ var NewProject = React.createClass({
   }
 });
 
-React.render(React.createElement(TimeCard, null), document.getElementById('app'));
+var stores = {
+  Projects: new ProjectDataStore()
+};
+
+var flux = new Fluxxor.Flux(stores, Actions.methods);
+
+flux.on("dispatch", function (type, payload) {
+  console.log("Dispatch:", type, payload);
+});
+
+React.render(React.createElement(TimeCard, { flux: flux }), document.getElementById('app'));

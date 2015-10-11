@@ -19,6 +19,9 @@
     "react": ">=0.13.0",
     "morris.js": "*",
     "fontawesome": "~4.3.0",
-    "seiyria-bootstrap-slider": "5.1.1"
+    "seiyria-bootstrap-slider": "5.1.1",
+    "fluxxor": "1.7.3",
+    "flux": "2.1.1",
+    "remarkable-bootstrap-notify": "*"
   }
 }
