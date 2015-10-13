@@ -13,6 +13,16 @@ var methods = {
   PROJECT: {
       init_load: function(){
         var self = this;
+        var notify = $.notify('<strong>Projects are Loading</strong> please wait...', {
+        	type: 'success',
+        	allow_dismiss: false,
+        	showProgressbar: true
+        },{
+        placement: {
+      		from: "top",
+      		align: "left"
+      	}});
+
         var defaultUsername = "Erik Schlegel";
         var defaultUserEmail = "erisch@microsoft.com"
         var userName = (typeof Office != 'undefined' && typeof Office.context != 'undefined')?Office.context.mailbox.userProfile.displayName:defaultUsername;
@@ -29,6 +39,8 @@ var methods = {
                       PartitionKey: response.PartitionKey,
                       RowKey: response.RowKey
                 });
+
+                notify.close();
               }
             },
             failure: function(jqXHR, textStatus, error){
